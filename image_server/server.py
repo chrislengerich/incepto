@@ -3,8 +3,10 @@ from flask import render_template
 from flask import jsonify
 from flask import request, Response
 from functools import wraps
+import time
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 
 # Simple security: pre-shared key.
 API_KEY = "b09c4de1043f8ad0815d"
@@ -45,7 +47,7 @@ def image():
 def index():
     if 'key' not in request.args and request.args['key'] != API_KEY:
         return render_template('')
-    return render_template('index.html')
+    return render_template('index.html', cache_key=time.time())
 
 if __name__ == '__main__':
     app.run()
