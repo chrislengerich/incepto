@@ -1,12 +1,17 @@
 <html>
 <head>
-    <script type="text/javascript">
-        window.setInterval(function() {
-          location.reload();
-        }, 1000);
-    </script>
+
 </head>
 <body>
-<img src="static/recent.jpg?lastmod={{ cache_key }}">
+<img id="recent" src="static/recent.jpg?lastmod={{ cache_key }}">
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket.on('new_image', function() {
+      document.getElementById("recent").src = "static/recent.jpg?lastmod=" + Math.floor(Date.now() / 1000);
+    })
+</script>
+
 </body>
 </html>

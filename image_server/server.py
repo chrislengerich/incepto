@@ -3,10 +3,13 @@ from flask import render_template
 from flask import jsonify
 from flask import request, Response
 from functools import wraps
+from flask_socketio import SocketIO
+import socketio
 import time
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+socketio = SocketIO(app)
 
 # Simple security: pre-shared key.
 API_KEY = "b09c4de1043f8ad0815d"
@@ -38,6 +41,7 @@ def image():
         file = request.files['image']
         file_path = 'static/recent.jpg'
         file.save(file_path)
+        socketio.emit('new_image', {}, broadcast=True)
         return jsonify({'path': 'recent.jpg'})
     else:
         return jsonify({'path': ''})
@@ -50,4 +54,4 @@ def index():
     return render_template('index.html', cache_key=time.time())
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
