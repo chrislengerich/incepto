@@ -6,16 +6,16 @@ from functools import wraps
 from flask_socketio import SocketIO
 import socketio
 import time
+import os
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 socketio = SocketIO(app)
 
-# Simple security: pre-shared key.
-API_KEY = "b09c4de1043f8ad0815d"
+# Simple security: pre-shared key "b09c4de1043f8ad0815d"
+API_KEY = os.environ['API_KEY']
 
 def check_auth(key):
-    print key
     return key == API_KEY
 
 def authenticate():
